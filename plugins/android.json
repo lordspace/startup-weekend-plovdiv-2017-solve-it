@@ -1,0 +1,37 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "co.solveit.app"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "co.solveit.app"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "co.solveit.app"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "co.solveit.app"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "co.solveit.app"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "co.solveit.app"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "co.solveit.app"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "co.solveit.app"
+        }
+    }
+}
