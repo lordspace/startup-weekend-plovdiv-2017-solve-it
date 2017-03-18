@@ -56,17 +56,44 @@ var app = {
         navigator.camera.getPicture(function cameraSuccess(imageUri) {
             app.displayImage(imageUri);
             // You may choose to copy the picture, save it somewhere, or upload.
-            func(imageUri);
+            //func(imageUri);
+            var fileEntry;
+            
+            if (imageUri.indexOf('file:') == 0) {
+                resolveLocalFileSystemURI(imageUri, function(e) {
+                    fileEntry = e;
+                    app.upload(fileEntry);
+                    app.logCallback('resolveLocalFileSystemURI()', true)(e);
+                }, app.logCallback('resolveLocalFileSystemURI()', false));
+            } else {
+                var path = imageUri.replace(/^file:\/\/(localhost)?/, '').replace(/%20/g, ' ');
+                fileEntry = new FileEntry('image_name.png', path);
+                app.upload(fileEntry);
+            }
+            
+            /*window.resolveLocalFileSystemURL( imageUri, function success(fileEntry) {
+                alert(fileEntry.fullPath);
+                console.log("got file: " + fileEntry.fullPath);
+                // displayFileData(fileEntry.fullPath, "File copied to");
+                app.upload(fileEntry);
+            }, app.onErrorResolveFile);*/
+
         }, function cameraError(error) {
             console.debug("Unable to obtain picture: " + error, "app");
         }, options);
+    },
+    
+    logCallback : function (apiName, success) {
+        return function() {
+            app.logCallback('Call to ' + apiName + (success ? ' success: ' : ' failed: ') + JSON.stringify([].slice.call(arguments)));
+        };
     },
     
     setOptions : function (srcType) {
         var options = {
             // Some common settings are 20, 50, and 100
             quality: 75,
-            allowEdit: false,
+            //allowEdit: false,
             destinationType: Camera.DestinationType.FILE_URI,
             // In this app, dynamically set the picture source, Camera or photo gallery
             sourceType: srcType,
@@ -89,16 +116,16 @@ var app = {
     },
     
     createNewFileEntry : function (imgUri) {
-        window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function success(dirEntry) {
+//        window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function success(dirEntry) {
+        window.resolveLocalFileSystemURL( imgUri, function success(dirEntry) {
             // JPEG file
-            dirEntry.getFile("tempFile.jpeg", { create: true, exclusive: false }, function (fileEntry) {
-                app.upload(fileEntry);
-                
+            dirEntry.getFile(dirEntry, { create: true, exclusive: false }, function (fileEntry) {
                 // Do something with it, like write to it, upload it, etc.
                 // writeFile(fileEntry, imgUri);
+                alert(fileEntry.fullPath);
                 console.log("got file: " + fileEntry.fullPath);
-                //alert(fileEntry.fullPath);
                 // displayFileData(fileEntry.fullPath, "File copied to");
+                app.upload(fileEntry);
 
             }, app.onErrorCreateFile);
 
@@ -108,12 +135,14 @@ var app = {
     upload : function (fileEntry) {
         // !! Assumes variable fileURL contains a valid URL to a text file on the device,
         var fileURL = fileEntry.toURL();
+        
+console.log( JSON.stringify(fileURL) );
 
         var success = function (r) {
             console.log("Successful upload...");
             console.log("Code = " + r.responseCode);
             // displayFileData(fileEntry.fullPath + " (content uploaded to server)");
-            alert("Done " + r.bytesSent + ' bytes' );
+            console.log("bytesSent: " + r.bytesSent );
         };
 
         var fail = function (error) {
@@ -122,15 +151,16 @@ var app = {
 
         var options = new FileUploadOptions();
         options.fileKey = "file";
-        options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+//        options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+        options.fileName = 'photo.jpg';
         options.mimeType = "image/jpeg";
         options.chunkedMode = false;
-//        options.mimeType = "text/plain";
+        //options.mimeType = "text/plain";
 
         var params = {};
         params.value1 = "test";
         params.value2 = "param";
-        params.client_device_id = device.uuid;
+        //params.client_device_id = device.uuid;
 
         options.params = params;
 
@@ -144,10 +174,17 @@ var app = {
 
     onErrorCreateFile : function (r) {
         alert('error: onErrorCreateFile');
+        console.log( JSON.stringify(r) );
+    },
+
+    onErrorResolveFile : function (r) {
+        alert('error: onErrorResolveFile');
+        console.log( JSON.stringify(r) );
     },
     
     onErrorResolveUrl : function (r) {
         alert('error: onErrorResolveUrl');
+        console.log( JSON.stringify(r) );
     }
     
 };
