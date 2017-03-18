@@ -130,7 +130,7 @@ var app = {
         var params = {};
         params.value1 = "test";
         params.value2 = "param";
-        params.client_device_id = device.uuid;
+        //params.client_device_id = device.uuid;
 
         options.params = params;
 
