@@ -45,7 +45,7 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-		window.location = 'http://solveit.co/app/';
+		//window.location = 'http://solveit.co/app/';
     }
 };
 

@@ -45,8 +45,17 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-		window.location = 'http://solveit.co/';
+		//window.location = 'http://solveit.co/app/';
     }
 };
 
 app.initialize();
+
+
+$(document).ready(function(){
+    $("button").click(function(){
+        $("#div1").fadeIn();
+        $("#div2").fadeIn("slow");
+        $("#div3").fadeIn(3000);
+    });
+});

@@ -27,4 +27,5 @@
     <engine name="android" spec="~6.1.2" />
 	<preference name="stay-in-webview" value="true" />
 	<allow-navigation href="*://*.solveit.co/*" />
+	<preference name="AndroidPersistentFileLocation" value="Compatibility" />
 </widget>

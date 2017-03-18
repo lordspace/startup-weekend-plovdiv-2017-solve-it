@@ -27,10 +27,16 @@
         },
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "co.solveit.app"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "co.solveit.app"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-compat": {
+            "PACKAGE_NAME": "co.solveit.app"
+        },
+        "cordova-plugin-file": {
             "PACKAGE_NAME": "co.solveit.app"
         }
     }
