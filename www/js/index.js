@@ -195,6 +195,10 @@ console.log( JSON.stringify(fileURL) );
         console.log( JSON.stringify(r) );
     },
     
+    redirect : function (r) {
+        window.open( r, '_self' );
+    },
+    
     util : {
         get_query_params : function (qs) {
             var params = {}, tokens, re = /[?&]?([^=]+)=([^&]*)/g;
@@ -218,25 +222,62 @@ console.log( JSON.stringify(fileURL) );
             if (!results) return null;
             if (!results[2]) return '';
             return decodeURIComponent(results[2].replace(/\+/g, " "));
+        },
+        
+        // is welcome
+        is_page : function (name) {
+            var url = window.location.href;
+            url = url.toLowerCase();
+            name = name.toLowerCase();
+            
+            return url.indexOf(name) != -1;
         }
     },
+    
+    storage : {
+        get : function ( key ) {
+            var storage = window.localStorage;
+            var value = storage.getItem(key); // Pass a key name to get its value.
+            value = value || '';
+            return value;
+        },
+
+        set : function ( key, value ) {
+            var storage = window.localStorage;
+            storage.setItem(key, value); // Pass a key name and its value to add or update that key.
+            return value;
+        },
+        
+        remove: function ( key ) {
+            var storage = window.localStorage;
+            storage.removeItem(key); // Pass a key name to remove that key from storage.
+        }
+    }
     
 };
 
 app.initialize();
 
-$(document).ready(function(){
+$(document).ready(function() {
     $( document ).ajaxError(function(event, request, settings) {
         $( ".result" ).html( "Error: There was an error while making the request to: " 
                 + settings.url );
     });
 
-    /*$("button").click(function(){
-        $("#div1").fadeIn();
-        $("#div2").fadeIn("slow");
-        $("#div3").fadeIn(3000);
-    });*/
+    var user_id = app.storage.get("user_id") || 0;
     
+    if ( user_id ) {
+        var is_tutor = app.storage.get("is_tutor") || 0;
+        
+        if (is_tutor) {
+            //app.redirect( 'welcome.html' );
+        } else {
+            
+        }
+    } else if ( ! app.util.is_page( 'welcome' ) ) {
+        app.redirect( 'welcome.html' );
+    }
+
     $('#takePic').on('click', function () {
         app.openCamera();
     } );
@@ -274,16 +315,4 @@ $(document).ready(function(){
         return false;
     } );
     
-    
-    var key = 'aaa';
-    var value = '123';
-    var storage = window.localStorage;
-    
-    storage.setItem(key, value); // Pass a key name and its value to add or update that key.
-    value = storage.getItem(key); // Pass a key name to get its value.
-    //storage.removeItem(key) // Pass a key name to remove that key from storage.
-    
-    //alert( app.util.get_param( 'key', 'yahoo=123&key=value123' ) );
-    
-    //alert( value );
 });
