@@ -180,6 +180,7 @@ console.log( JSON.stringify(fileURL) );
         var params = {};
         params.value1 = "test";
         params.item_id = app.util.get_param('item_id') || 0;
+        params.user_id = app.storage.get('user_id') || 0;
         options.params = params;
 
         var api_end_point = app.get_api_end_point() + '&cmd=image.upload';
