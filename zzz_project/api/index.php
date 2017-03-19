@@ -63,11 +63,10 @@ if ( isset( $_REQUEST['ajax'] ) ) {
                     $buff = serialize( $users );
                     $buff = base64_encode( $buff );
                     file_put_contents( $users_file, $buff, LOCK_EX );
-                } else {
-                    $data['data']['user_id'] = $users[ $email ]['user_id'];
                 }
                 
                 $data['data']['email'] = $email;
+                $data['data']['user_id'] = $users[ $email ]['user_id'];
                                 
 //          var_dump($data);
 //          var_dump($email);
