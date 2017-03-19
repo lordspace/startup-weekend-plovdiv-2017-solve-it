@@ -60,22 +60,24 @@
     <!-- Login start -->
     <div class="container text-center">
       <div class="page-header">
-        <h1>Login to your account</h1>
+        <h3>Login / Register</h3>
       </div>
-      <form>
+        <form id="login_join_form" class="login_join_form">
         <div class="form-group">
-          <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email: you@example.com" required="required" />
         </div>
         <div class="form-group">
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          <input type="password" class="form-control" id="pass" name="pass" placeholder="Password" required="required" />
         </div>
 
         <div>
-          <em>If you don't have account just enter your email and password and we will create you one.</em>
+          <em>If you don't have account we will create one for you.</em>
         </div>
 
-        <button type="submit" class="btn btn-success m-t-25">Get started now</button>
+        <button type="submit" class="btn btn-success m-t-25 btn-full">Get started now</button>
       </form>
+        <div id="result" class="result">
+        </div>
     </div>
     <!-- Login end -->
 
@@ -85,7 +87,7 @@
     <!-- Submit start -->
     <!-- <div class="container text-center">
       <div class="page-header">
-        <h1>Ask a question</h1>
+        <h3>Ask a question</h3>
       </div>
       <form>
         <div class="form-group">
@@ -93,7 +95,7 @@
         </div>
         <p class="lead">Take a photo of your problem and submit it and you will get your answer from our best tutors</p>
         <img src="http://placehold.it/350x150" />
-        <button type="button" class="btn btn-success btn-lg m-t-25 btn-full">SUBMIT</button>
+        <button type="button" class="btn btn-success btn-lg m-t-25 btn-full ">SUBMIT</button>
 
       </form>
     </div> -->
@@ -106,7 +108,7 @@
     <!-- Problems list start -->
     <!-- <div class="container">
       <div class="page-header text-center">
-        <h2>Submitted questions</h1>
+        <h2>Submitted questions</h3>
       </div>
 
       <ul class='problems-list'>
@@ -137,7 +139,7 @@
     <!-- Problems details start -->
     <!-- <div class="container problem-details">
       <div class="page-header text-center">
-        <h2>Question details view</h1>
+        <h2>Question details view</h3>
       </div>
 
       <img src="http://placehold.it/350x250" />
@@ -165,7 +167,8 @@
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="share/jquery-3.2.0.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="design/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
   </body>
 </html>

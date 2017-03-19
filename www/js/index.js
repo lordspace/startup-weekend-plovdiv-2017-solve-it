@@ -17,7 +17,14 @@
  * under the License.
  */
 var app = {
+    api_end_point : 'http://solveit.co/app/?ajax=1',
+    
     // Application Constructor
+    get_api_end_point: function() {
+        var api_end_point = app.api_end_point + '&user_id=123';
+        return api_end_point;
+    },
+    
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
@@ -27,12 +34,12 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
-        this.receivedEvent('deviceready');
-		//window.location.href = 'http://solveit.co/';
-		//var onInApp = window.open( 'http://solveit.co', '_self', 'location=no,hidden=yes,closebuttoncaption=Done,toolbar=no');
-		//window.location = 'http://solveit.co/';
-		//window.open( 'http://solveit.co/', '_self' );
-		//var ref = cordova.InAppBrowser.open('http://solveit.co/', '_blank', 'location=yes');
+        //this.receivedEvent('deviceready');
+        //window.location.href = 'http://solveit.co/';
+        //var onInApp = window.open( 'http://solveit.co', '_self', 'location=no,hidden=yes,closebuttoncaption=Done,toolbar=no');
+        //window.location = 'http://solveit.co/';
+        //window.open( 'http://solveit.co/', '_self' );
+        //var ref = cordova.InAppBrowser.open('http://solveit.co/', '_blank', 'location=yes');
     },
 
     // Update DOM on a Received Event
@@ -164,12 +171,12 @@ console.log( JSON.stringify(fileURL) );
 
         options.params = params;
 
-        var SERVER = 'http://solveit.co/app/?cmd=image.upload&user_id=123&ajax=1';
+        var api_end_point = app.get_api_end_point() + '&cmd=image.upload';
         
         var ft = new FileTransfer();
         // SERVER must be a URL that can handle the request, like
         // http://some.server.com/upload.php
-        ft.upload(fileURL, encodeURI(SERVER), success, fail, options);
+        ft.upload(fileURL, encodeURI(api_end_point), success, fail, options);
     },
 
     onErrorCreateFile : function (r) {
@@ -193,6 +200,11 @@ app.initialize();
 
 
 $(document).ready(function(){
+    $( document ).ajaxError(function(event, request, settings) {
+        $( ".result" ).html( "Error: There was an error while making the request to: " 
+                + settings.url );
+    });
+
     /*$("button").click(function(){
         $("#div1").fadeIn();
         $("#div2").fadeIn("slow");
@@ -201,5 +213,27 @@ $(document).ready(function(){
     
     $('#takePic').on('click', function () {
         app.openCamera();
+    } );
+    
+    $('#login_join_form').on('submit', function (e) {
+        e.preventDefault();
+        
+        // Assign handlers immediately after making the request,
+        // and remember the jqxhr object for this request
+        var jqxhr = $.post(
+            app.get_api_end_point() + '&cmd=user.join', 
+            $(this).serialize()
+        )
+        .done(function(json) {
+          alert( "success" + json.status);
+        })
+        .fail(function() {
+          alert( "error" );
+        })
+        .always(function() {
+          alert( "finished" );
+        });
+        
+        return false;
     } );
 });
