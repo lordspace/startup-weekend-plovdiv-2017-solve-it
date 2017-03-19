@@ -66,7 +66,10 @@ var app = {
     openCamera : function (selection) {
         selection = selection || '';
         
-        var srcType = selection == 'camera' ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY;
+        var srcType = selection == 'camera' 
+            ? Camera.PictureSourceType.CAMERA
+            : Camera.PictureSourceType.PHOTOLIBRARY;
+
         var options = app.setOptions(srcType);
         var func = app.createNewFileEntry;
 
@@ -116,8 +119,8 @@ var app = {
             sourceType: srcType,
             encodingType: Camera.EncodingType.JPEG,
             
-            // mediaType: Camera.MediaType.PICTURE, // camera
-            sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY, // library
+             mediaType: Camera.MediaType.PICTURE, // camera
+//            sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY, // library
             targetWidth: 1024,
             //targetHeight: 512,
             saveToPhotoAlbum: true,
@@ -337,4 +340,10 @@ $(document).ready(function() {
         return false;
     } );
     
+    // Ask
+    $('#ask_question_form2').on( 'submit', function (e) {
+        e.preventDefault();
+        app.redirect( 'q_ask3.html' );
+        return false;
+    } );
 });

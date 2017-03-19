@@ -114,6 +114,10 @@ h1 {
     -webkit-animation:fade 3000ms infinite;
 }
 
-.imageFile {
+.image_file {
     width: 100%;
+	max-height:250px;
+	margin-top:15px;
+	margin-bottom:15px;
 }
+

@@ -1,3 +1,24 @@
+      <a href="q_ask.html" class="btn btn-success m-t-10 text-center btn-full">Ask Question</a>
+      <a href="q_list.html" class="btn btn-success m-t-10 text-center btn-full">List Questions</a>
+      <a href="q_view.html" class="btn btn-success m-t-10 text-center btn-full">View Question</a>
+
+    /*$("button").click(function(){
+        $("#div1").fadeIn();
+        $("#div2").fadeIn("slow");
+        $("#div3").fadeIn(3000);
+    });*/
+    
+    var key = 'aaa';
+    var value = '123';
+    var storage = window.localStorage;
+    
+    storage.setItem(key, value); // Pass a key name and its value to add or update that key.
+    value = storage.getItem(key); // Pass a key name to get its value.
+    //storage.removeItem(key) // Pass a key name to remove that key from storage.
+    
+    //alert( app.util.get_param( 'key', 'yahoo=123&key=value123' ) );
+    
+    //alert( value );
 
     //alert( app.util.get_param( 'key', 'yahoo=123&key=value123' ) );
     
