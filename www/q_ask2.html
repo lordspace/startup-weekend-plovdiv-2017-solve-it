@@ -56,12 +56,23 @@
     <!-- Submit start -->
     <div class="container text-center">
       <div class="page-header">
-        <h3>Members</h3>
+        <h3>Ask a question</h3>
       </div>
+      <form id="ask_question_form2" class="ask_question_form2">
+        <div class="form-group">
+          <!--<input type="text" class="form-control" id="id" name='descr' placeholder="Short description" />-->
+        </div>
+        <p class="lead">Upload a photo of your math problem and you will get answer from our cool tutors</p>
         
-    <a href='q_ask.html' class="btn btn-success btn-lg m-t-10 text-center btn-full">Submit a Problem</a>
-    <a href='q_list.html' class="btn btn-default btn-lg m-t-10 text-center btn-full">View Problems</a>
-
+        <a id='app_q_pic_from_gallery' class="btn btn-default btn-lg m-t-10 text-center btn-full">Pick from Gallery</a>
+        <a id='app_q_pic_from_camera' class="btn btn-default btn-lg m-t-10 text-center btn-full">Take Picture</a>
+        
+        <div class="pic">
+            <img id="image_file" class="image_file" alt="" title="Pic" />
+        </div>
+        
+        <button type="submit" class="btn btn-success btn-lg m-t-25 btn-full ">Done</button>
+      </form>
     </div> 
     <!-- Submit end -->
 

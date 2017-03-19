@@ -64,7 +64,9 @@ var app = {
     },
     
     openCamera : function (selection) {
-        var srcType = Camera.PictureSourceType.CAMERA;
+        selection = selection || '';
+        
+        var srcType = selection == 'camera' ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY;
         var options = app.setOptions(srcType);
         var func = app.createNewFileEntry;
 
@@ -126,7 +128,7 @@ var app = {
     },
     
     displayImage : function (imgUri) {
-        var elem = document.getElementById( 'imageFile' );
+        var elem = document.getElementById( 'image_file' );
         elem.src = imgUri;
     },
     
@@ -152,7 +154,6 @@ var app = {
         var fileURL = fileEntry.toURL();
         
 console.log( JSON.stringify(fileURL) );
-
         var success = function (r) {
             console.log("Successful upload...");
             console.log("Code = " + r.responseCode);
@@ -170,12 +171,10 @@ console.log( JSON.stringify(fileURL) );
         options.fileName = 'photo.jpg';
         options.mimeType = "image/jpeg";
         options.chunkedMode = false;
-        //options.mimeType = "text/plain";
 
         var params = {};
         params.value1 = "test";
-        params.value2 = "param";
-
+        params.item_id = app.util.get_param('item_id') || 0;
         options.params = params;
 
         var api_end_point = app.get_api_end_point() + '&cmd=image.upload';
@@ -272,22 +271,30 @@ $(document).ready(function() {
 
     var user_id = app.storage.get("user_id") || 0;
     
-    if ( user_id ) {
-        var is_tutor = app.storage.get("is_tutor") || 0;
-        
-        if (is_tutor) {
-            //app.redirect( 'welcome.html' );
-        } else if ( app.util.is_page( 'index' ) || app.util.is_page( 'welcome' ) ) {
-            app.redirect( 'member.html' );
+    if ( 1 ) {
+        if ( user_id ) {
+            var is_tutor = app.storage.get("is_tutor") || 0;
+
+            if ( app.util.is_page( 'index' ) || app.util.is_page( 'welcome' ) ) {
+                if (is_tutor) {
+                    app.redirect( 'member.html?tab=problems' );
+                } else {
+                    app.redirect( 'member.html?tab=submit' );
+                }
+            }
+
+            //alert("user_id: "+ user_id);
+        } else if ( ! app.util.is_page( 'welcome' ) && ! app.util.is_page( 'join' )  ) {
+            app.redirect( 'welcome.html' );
         }
-        
-        //alert("user_id: "+ user_id);
-    } else if ( ! app.util.is_page( 'welcome' ) && ! app.util.is_page( 'join' )  ) {
-        app.redirect( 'welcome.html' );
     }
 
-    $('#takePic').on('click', function () {
-        app.openCamera();
+    $('#takePic,#app_q_pic_from_gallery').on('click', function () {
+        app.openCamera( 'gallery' );
+    } );
+
+    $('#app_q_pic_from_camera').on('click', function () {
+        app.openCamera( 'camera' );
     } );
     
     $('#login_join_form').on('submit', function (e) {
@@ -319,11 +326,12 @@ $(document).ready(function() {
         // Assign handlers immediately after making the request,
         // and remember the jqxhr object for this request
         var jqxhr = $.post(
-            app.get_api_end_point() + '&cmd=item.post', 
+            app.get_api_end_point() + '&cmd=item.create', 
             $(this).serialize()
         )
         .done(function(json) {
-            alert( "success" + json.status);
+            //alert( "success" + json.status);
+            app.redirect( 'q_ask2.html?item_id=' + json.data.item_id );
         });
  
         return false;
