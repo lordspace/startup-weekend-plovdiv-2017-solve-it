@@ -277,9 +277,11 @@ $(document).ready(function() {
         
         if (is_tutor) {
             //app.redirect( 'welcome.html' );
-        } else {
-            
+        } else if ( app.util.is_page( 'index' ) || app.util.is_page( 'welcome' ) ) {
+            app.redirect( 'member.html' );
         }
+        
+        //alert("user_id: "+ user_id);
     } else if ( ! app.util.is_page( 'welcome' ) && ! app.util.is_page( 'join' )  ) {
         app.redirect( 'welcome.html' );
     }
