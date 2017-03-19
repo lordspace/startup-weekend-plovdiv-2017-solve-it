@@ -103,3 +103,7 @@ a.primary-bg {
 #footer-menu .nav-col a.primary-bg {
   color: #fff;
 }
+
+.app_hide {
+    display: none;
+}

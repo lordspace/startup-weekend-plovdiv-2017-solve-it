@@ -74,6 +74,8 @@ var app = {
         var func = app.createNewFileEntry;
 
         navigator.camera.getPicture(function cameraSuccess(imageUri) {
+            $('.app_delayed_button').show();
+            
             app.displayImage(imageUri);
             // You may choose to copy the picture, save it somewhere, or upload.
             //func(imageUri);
