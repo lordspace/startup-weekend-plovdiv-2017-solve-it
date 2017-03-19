@@ -21,7 +21,13 @@ var app = {
     
     // Application Constructor
     get_api_end_point: function() {
-        var api_end_point = app.api_end_point + '&user_id=123&device_id=' . encodeURI(device.uuid) + '-' + device.serial;
+        var api_end_point = app.api_end_point + '&device_id=' + encodeURI( device.uuid + '-' + device.serial );
+        
+        var user_id = app.storage.get("user_id") || 0;
+        
+        if ( user_id ) {
+            api_end_point += '&user_id=' + user_id;
+        }
         
         //params.client_device_id = device.uuid;
         return api_end_point;
@@ -274,7 +280,7 @@ $(document).ready(function() {
         } else {
             
         }
-    } else if ( ! app.util.is_page( 'welcome' ) ) {
+    } else if ( ! app.util.is_page( 'welcome' ) && ! app.util.is_page( 'join' )  ) {
         app.redirect( 'welcome.html' );
     }
 
@@ -284,6 +290,7 @@ $(document).ready(function() {
     
     $('#login_join_form').on('submit', function (e) {
         e.preventDefault();
+        $('.result').html( 'Loading...' );
         
         // Assign handlers immediately after making the request,
         // and remember the jqxhr object for this request
@@ -292,7 +299,12 @@ $(document).ready(function() {
             $(this).serialize()
         )
         .done(function(json) {
-            alert( "success" + json.status);
+            console.log(json);
+            //alert( "success" + json.status + ' ' + json.data.user_id);
+            app.storage.set( 'user_id', json.data.user_id );
+            app.storage.set( 'email', json.data.email );
+            $('.result').html( 'Done' );
+            app.redirect( 'member.html' );
         });
         
         return false;
