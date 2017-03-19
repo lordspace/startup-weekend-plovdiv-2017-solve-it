@@ -2,6 +2,13 @@
 
 header( 'Access-Control-Allow-Origin: *' );
 
+define( 'APP_BASE_DIR', __DIR__ );
+define( 'APP_DATA_DIR', APP_BASE_DIR . '/data' );
+
+if ( ! is_dir( APP_DATA_DIR ) ) {
+    mkdir( APP_DATA_DIR, 0777, 1 );
+}
+
 $body = '';
 $log_buff = '';
 
@@ -9,30 +16,90 @@ $ua = empty($_SERVER['HTTP_USER_AGENT']) ? '' : $_SERVER['HTTP_USER_AGENT'];
 $ip = empty($_SERVER['REMOTE_ADDR']) ? '' : $_SERVER['REMOTE_ADDR'];
 
 if ( isset( $_REQUEST['ajax'] ) ) {
-	$data = array( 'status' => 1, 'msg' => '', );
-	$data = array_merge( $_REQUEST, $_FILES, $data, array('ip' => $ip, 'user_agent' => $ua), $_SERVER );
-	
-        if ( ( isset( $_FILES['file']['error'] ) 
-                && $_FILES['file']['error'] === UPLOAD_ERR_OK )
-                && ! empty( $_FILES['file']['tmp_name'] ) ) {
-            copy( $_FILES['file']['tmp_name'], 'image_' . microtime(true) . '.jpg' );
+    $data = array( 'status' => 1, 'msg' => '', );
+    $data = array_merge( $_REQUEST, $_FILES, $data, array('ip' => $ip, 'user_agent' => $ua), $_SERVER );
+
+    if ( ( isset( $_FILES['file']['error'] ) 
+            && $_FILES['file']['error'] === UPLOAD_ERR_OK )
+            && ! empty( $_FILES['file']['tmp_name'] ) ) {
+        copy( $_FILES['file']['tmp_name'], 'image_' . microtime(true) . '.jpg' );
+    }
+
+    $raw_post = file_get_contents( 'php://input' );
+
+    if ( ! empty( $raw_post ) ) {
+        $data['raw_post'] = isset( $_REQUEST['raw_post_base64'] )
+            ? base64_decode($_REQUEST['raw_post_base64'])
+            : $raw_post;
+    }
+
+    if ( function_exists( 'apache_request_headers' ) ) {
+        $data = array_merge( $data, apache_request_headers() );
+    }
+
+    $data['data'] = [];
+    
+    if ( ! empty( $data['cmd'] ) ) {
+        switch ( $data['cmd'] ) {
+            case 'user.join' :
+                // register user
+                $email = empty($data['email']) ? '' : trim( $data['email'] );
+                $users_file = APP_DATA_DIR . '/users.txt';
+                
+                if (file_exists($users_file) ) {
+                    $buff = file_get_contents( $users_file, LOCK_SH );
+                    $buff = base64_decode( $buff );
+                    $users = unserialize( $buff );
+                }
+
+                $users = empty($users) ? [] : $users;
+                
+                if ( empty( $users[ $email ] ) ) { // create account!
+                    $users[ $email ][ 'user_id' ] = microtime(true);
+                    $users[ $email ][ 'user_id' ] = str_replace( '.', '-', $users[ $email ][ 'user_id' ] );
+                    $users[ $email ][ 'date_reg' ] = date( 'r' );
+                    $users[ $email ]['data'] = $data; 
+                    
+                    $buff = serialize( $users );
+                    $buff = base64_encode( $buff );
+                    file_put_contents( $users_file, $buff, LOCK_EX );
+                } else {
+                    $data['data']['user_id'] = $users[ $email ]['user_id'];
+                }
+                
+                $data['data']['email'] = $email;
+                                
+//          var_dump($data);
+//          var_dump($email);
+//          var_dump($users_file);
+//          var_dump($users);
+//die(__LINE__ . __FILE__);      
+
+                break;
+            
+            case 'user.logout':
+                // register user
+                $data['data']['user_id'] = time();
+                break;
+            
+            case 'item.create':
+                // register user
+                $data['data']['item_id'] = time();
+                break;
+            
+            case 'delete.create':
+                // register user
+                $data['data']['item_id'] = time();
+                break;
+
+            default:
+                break;
         }
-        
-	$raw_post = file_get_contents( 'php://input' );
-	
-	if ( ! empty( $raw_post ) ) {
-            $data['raw_post'] = isset( $_REQUEST['raw_post_base64'] )
-                ? base64_decode($_REQUEST['raw_post_base64'])
-                : $raw_post;
-	}
-	
-	if ( function_exists( 'apache_request_headers' ) ) {
-		$data = array_merge( $data, apache_request_headers() );
-	}
-	
-	$log_buff = "Date: " . date('r') . "\n" . var_export($data, 1) . "\n\n";
-	file_put_contents(dirname(__FILE__) . '/data.txt', $log_buff, FILE_APPEND);
-	App_Echo_Util::sendJSON($data);
+    }
+    
+    $log_buff = "Date: " . date('r') . "\n" . var_export($data, 1) . "\n\n";
+    file_put_contents(dirname(__FILE__) . '/data.txt', $log_buff, FILE_APPEND);
+    App_Echo_Util::sendJSON($data);
 } else {
 	$log_buff .= 'Request URI: ' . $_SERVER['REQUEST_URI'] . "<br />\n";
 	$log_buff .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . "<br />\n";
