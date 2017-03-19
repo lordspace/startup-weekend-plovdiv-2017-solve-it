@@ -21,7 +21,9 @@ var app = {
     
     // Application Constructor
     get_api_end_point: function() {
-        var api_end_point = app.api_end_point + '&user_id=123';
+        var api_end_point = app.api_end_point + '&user_id=123&device_id=' . encodeURI(device.uuid) + '-' + device.serial;
+        
+        //params.client_device_id = device.uuid;
         return api_end_point;
     },
     
@@ -167,7 +169,6 @@ console.log( JSON.stringify(fileURL) );
         var params = {};
         params.value1 = "test";
         params.value2 = "param";
-        //params.client_device_id = device.uuid;
 
         options.params = params;
 
@@ -192,12 +193,37 @@ console.log( JSON.stringify(fileURL) );
     onErrorResolveUrl : function (r) {
         alert('error: onErrorResolveUrl');
         console.log( JSON.stringify(r) );
-    }
+    },
+    
+    util : {
+        get_query_params : function (qs) {
+            var params = {}, tokens, re = /[?&]?([^=]+)=([^&]*)/g;
+
+            while (tokens = re.exec(qs)) {
+                params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+            }
+
+            return params;
+        },
+        
+        // app.util.get_param();
+        // 
+        // http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+        get_param : function (name, url) {
+            url = url || window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+    },
     
 };
 
 app.initialize();
-
 
 $(document).ready(function(){
     $( document ).ajaxError(function(event, request, settings) {
@@ -247,4 +273,17 @@ $(document).ready(function(){
  
         return false;
     } );
+    
+    
+    var key = 'aaa';
+    var value = '123';
+    var storage = window.localStorage;
+    
+    storage.setItem(key, value); // Pass a key name and its value to add or update that key.
+    value = storage.getItem(key); // Pass a key name to get its value.
+    //storage.removeItem(key) // Pass a key name to remove that key from storage.
+    
+    //alert( app.util.get_param( 'key', 'yahoo=123&key=value123' ) );
+    
+    //alert( value );
 });

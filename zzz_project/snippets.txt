@@ -1,0 +1,25 @@
+
+    //alert( app.util.get_param( 'key', 'yahoo=123&key=value123' ) );
+    
+    //alert( value );
+    // https://github.com/apla/me.apla.cordova.app-preferences
+    function ok (value) {
+        alert('ok:' + value);
+    }
+    
+    function fail (error) {
+        alert('error:' + value);
+    }
+
+    var prefs = window.plugins.appPreferences;
+    var prefs2 = apppreferences;
+    console.log(prefs2);
+    // store key => value pair
+    prefs.store (ok, fail, 'key', 'value1');
+
+    // store key => value pair in dict (see notes)
+    prefs.store (ok, fail, 'dict', 'key', 'value2');
+
+    // fetch value by key (value will be delivered through "ok" callback)
+    prefs.fetch (ok, fail, 'key');
+

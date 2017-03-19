@@ -33,6 +33,12 @@
         },
         "cordova-plugin-file": {
             "PACKAGE_NAME": "co.solveit.app"
+        },
+        "cordova-plugin-app-preferences": {
+            "PACKAGE_NAME": "co.solveit.app"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "co.solveit.app"
         }
     },
     "dependent_plugins": {

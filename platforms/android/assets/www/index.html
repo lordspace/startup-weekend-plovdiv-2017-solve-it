@@ -53,21 +53,17 @@
       </div>
     </nav>
 
-
-
-
-
     <!-- Login start -->
     <div class="container text-center">
       <div class="page-header">
         <h3>Login / Register</h3>
       </div>
-        <form id="login_join_form" class="login_join_form">
+      <form id="login_join_form" class="login_join_form">
         <div class="form-group">
-          <input type="email" class="form-control" id="email" name="email" placeholder="Email: you@example.com" />
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email: you@example.com" required="required" />
         </div>
         <div class="form-group">
-          <input type="password" class="form-control" id="pass" name="pass" placeholder="Password" />
+          <input type="password" class="form-control" id="pass" name="pass" placeholder="Password" required="required" />
         </div>
 
         <div>
@@ -76,12 +72,12 @@
 
         <button type="submit" class="btn btn-success m-t-25 btn-full">Get started now</button>
       </form>
-        <div id="result" class="result">
-        </div>
+      <div id="result" class="result"></div>
+      <a href="q_ask.html" class="btn btn-success m-t-10 text-center btn-full">Ask Question</a>
+      <a href="q_list.html" class="btn btn-success m-t-10 text-center btn-full">List Questions</a>
+      <a href="q_view.html" class="btn btn-success m-t-10 text-center btn-full">View Question</a>
     </div>
     <!-- Login end -->
-
-
 
 
     <!-- Submit start -->
@@ -102,10 +98,8 @@
     <!-- Submit end -->
 
 
-
-
-
     <!-- Problems list start -->
+    
     <!-- <div class="container">
       <div class="page-header text-center">
         <h2>Submitted questions</h3>
