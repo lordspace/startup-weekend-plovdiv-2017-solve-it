@@ -225,15 +225,26 @@ $(document).ready(function(){
             $(this).serialize()
         )
         .done(function(json) {
-          alert( "success" + json.status);
-        })
-        .fail(function() {
-          alert( "error" );
-        })
-        .always(function() {
-          alert( "finished" );
+            alert( "success" + json.status);
         });
         
+        return false;
+    } );
+    
+    // Ask
+    $('#ask_question_form').on( 'submit', function (e) {
+        e.preventDefault();
+        
+        // Assign handlers immediately after making the request,
+        // and remember the jqxhr object for this request
+        var jqxhr = $.post(
+            app.get_api_end_point() + '&cmd=item.post', 
+            $(this).serialize()
+        )
+        .done(function(json) {
+            alert( "success" + json.status);
+        });
+ 
         return false;
     } );
 });
