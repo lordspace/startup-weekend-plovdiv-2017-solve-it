@@ -348,4 +348,12 @@ $(document).ready(function() {
         app.redirect( 'q_ask3.html' );
         return false;
     } );
+    
+    // app_logout_btn
+    $('#app_logout_btn').on( 'click', function (e) {
+        e.preventDefault();
+        app.storage.remove("user_id");
+        app.redirect( 'welcome.html' );
+        return false;
+    } );
 });
